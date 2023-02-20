@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { parse } = require("csv-parse");
 
-const results = [];
+const Planets = require("./planets.schema");
 
 function isHabitablePlanet(palnet) {
 	return (
@@ -22,15 +22,38 @@ function loadPlanets() {
 					columns: true,
 				})
 			)
-			.on("data", (data) => {
-				if (isHabitablePlanet(data)) results.push(data);
+			.on("data", async (data) => {
+				if (isHabitablePlanet(data)) {
+					savePlanet(data);
+				}
 			})
-			.on("end", () => resolve())
+			.on("end", async () => {
+				const countPlanetsFound = (await getAllPlanets()).length;
+				resolve();
+			})
 			.on("error", (error) => reject(error.message));
 	});
 }
 
+async function getAllPlanets() {
+	return await Planets.find({}, { _id: 0 });
+}
+
+async function savePlanet(data) {
+	await Planets.updateOne(
+		{
+			keplerName: data.kepler_name,
+		},
+		{
+			keplerName: data.kepler_name,
+		},
+		{
+			upsert: true,
+		}
+	);
+}
+
 module.exports = {
 	loadPlanets,
-	planets: results,
+	getAllPlanets,
 };

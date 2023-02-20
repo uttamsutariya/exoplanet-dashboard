@@ -7,8 +7,11 @@
 		"start": "node src/server.js",
 		"cluster": "pm2 start src/server.js --name nasa-project -i max",
 		"dev": "nodemon src/server.js",
-		"test": "jest",
+		"test": "jest --detectOpenHandles",
 		"test-watch": "jest --watch"
+	},
+	"jest": {
+		"testEnvironment": "node"
 	},
 	"keywords": [],
 	"author": "",
@@ -17,6 +20,7 @@
 		"cors": "^2.8.5",
 		"csv-parse": "^5.3.5",
 		"express": "^4.18.2",
+		"mongoose": "^6.9.2",
 		"morgan": "^1.10.0",
 		"pm2": "^5.2.2"
 	},

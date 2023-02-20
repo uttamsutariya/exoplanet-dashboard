@@ -1,6 +1,7 @@
-const launches = new Map();
+const Launches = require("./launches.schema");
+const Planets = require("./planets.schema");
 
-let latestFLightNumber = 100;
+const DEFAULT_FLIGHT_NUMBER = 100;
 
 const launch = {
 	flightNumber: 100,
@@ -8,41 +9,60 @@ const launch = {
 	rocket: "Explorer IS1",
 	launchDate: new Date("December 27, 2030"),
 	target: "Kepler-442 b",
-	customer: ["NASA"],
+	customers: ["NASA", "ZTM"],
 	upcoming: true,
 	success: true,
 };
 
-launches.set(launch.flightNumber, launch);
+saveLaunch(launch);
 
-function getAllLaunches() {
-	return Array.from(launches.values());
+async function saveLaunch(launch) {
+	const planet = await Planets.findOne({ keplerName: launch.target });
+
+	if (!planet) return new Error("No matching planet found");
+
+	await Launches.findOneAndUpdate({ flightNumber: launch.flightNumber }, launch, { upsert: true });
 }
 
-function addNewLaunch(launch) {
-	launches.set(
-		++latestFLightNumber,
-		Object.assign(launch, {
-			flightNumber: latestFLightNumber,
-			upcoming: true,
-			success: true,
-		})
+async function getAllLaunches() {
+	return await Launches.find({}, { _id: 0 });
+}
+
+async function getLatestFlightNumber() {
+	const latestLaunch = await Launches.findOne().sort("-flightNumber");
+	return !latestLaunch ? DEFAULT_FLIGHT_NUMBER : latestLaunch.flightNumber + 1;
+}
+
+async function scheduleNewLaunch(launch) {
+	const newLaunch = Object.assign(launch, {
+		success: true,
+		upcoming: true,
+		customers: ["ZTM", "NASA", "SPACEX"],
+		flightNumber: await getLatestFlightNumber(),
+	});
+
+	await saveLaunch(newLaunch);
+}
+
+async function existLaunchWithId(launchId) {
+	return await Launches.findOne({ flightNumber: launchId });
+}
+
+async function abortLaunchById(launchId) {
+	return await Launches.updateOne(
+		{
+			flightNumber: launchId,
+		},
+		{
+			upcoming: false,
+			success: false,
+		}
 	);
-}
-
-function existLaunchWithId(launchId) {
-	return launches.has(launchId);
-}
-
-function abortLaunchById(launchId) {
-	const aborted = launches.get(launchId);
-	aborted.upcoming = false;
-	aborted.success = false;
 }
 
 module.exports = {
 	getAllLaunches,
-	addNewLaunch,
+	scheduleNewLaunch,
 	existLaunchWithId,
 	abortLaunchById,
 };
