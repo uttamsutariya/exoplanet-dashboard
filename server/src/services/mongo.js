@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const DB_URL = "mongodb://127.0.0.1:27017/nasa";
+const DB_URL = process.env.DB_URL;
 
 /**
  * db connection handler
