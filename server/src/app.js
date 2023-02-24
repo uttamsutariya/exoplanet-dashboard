@@ -1,8 +1,13 @@
 const path = require("path");
 const morgan = require("morgan");
 const cors = require("cors");
+const helmet = require("helmet");
 const express = require("express");
+
 const app = express();
+
+// headers security middleware
+app.use(helmet());
 
 const api_v1 = require("./routes/api_v1");
 
