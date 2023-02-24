@@ -8,17 +8,31 @@ jobs:
     build:
         env:
             CI: true
+            DB_URL: mongodb://127.0.0.1:27017/nasa
+
         strategy:
             matrix:
                 node-version: [16.x, 18.x]
+                mongodb-version: ["4.4"]
+
         runs-on: ubuntu-latest
+
         steps:
             - name: Default checkout action
               uses: actions/checkout@v2
+
             - name: Use node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v2
               with:
                   node-version: ${{ matrix.node-version }}
+
+            - name: Use MongoDB for testing
+              uses: supercharge/mongodb-github-action@1.6.0
+              with:
+                  mongodb-version: ${{ matrix.mongodb-version }}
+
             - run: npm install
+
             - run: npm run build --prefix client
+
             - run: npm test
