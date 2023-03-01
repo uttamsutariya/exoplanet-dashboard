@@ -54,12 +54,14 @@ async function populateLaunches() {
 			return payload["customers"];
 		});
 
+		const isUpcoming = new Date(launchDoc["upcoming"]).getTime() > Date.now();
+
 		const launch = {
 			flightNumber: launchDoc["flight_number"],
 			mission: launchDoc["name"],
 			rocket: launchDoc["rocket"]["name"],
 			launchDate: launchDoc["date_local"],
-			upcoming: launchDoc["upcoming"],
+			upcoming: isUpcoming,
 			success: launchDoc["success"],
 			customers,
 		};
@@ -96,9 +98,9 @@ async function getLatestFlightNumber() {
 }
 
 async function scheduleNewLaunch(launch) {
-	// const planet = await Planets.findOne({ keplerName: launch.target });
+	const planet = await Planets.findOne({ keplerName: launch.target });
 
-	// if (!planet) throw new Error("No matching planet found");
+	if (!planet) throw new Error("No matching planet found");
 
 	const newLaunch = Object.assign(launch, {
 		success: true,

@@ -42,6 +42,7 @@ const Upcoming = (props) => {
 				Upcoming missions including both SpaceX launches and newly scheduled Zero to Mastery rockets.
 			</Paragraph>
 			<Words animate>Warning! Clicking on the ✖ aborts the mission.</Words>
+			<Words animate>To Launch a mission go to the launch panel.</Words>
 			<Table animate show={entered}>
 				<table style={{ tableLayout: "fixed" }}>
 					<thead>
