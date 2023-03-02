@@ -3,6 +3,7 @@ version: "3"
 services:
     backend:
         build: .
+        image: uttam1712/nasa-dashboard-project
         environment:
             - DB_URL=mongodb://database:27017/nasa
             - PORT=8000
