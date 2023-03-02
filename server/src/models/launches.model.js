@@ -98,9 +98,9 @@ async function getLatestFlightNumber() {
 }
 
 async function scheduleNewLaunch(launch) {
-	const planet = await Planets.findOne({ keplerName: launch.target });
+	// const planet = await Planets.findOne({ keplerName: launch.target });
 
-	if (!planet) throw new Error("No matching planet found");
+	// if (!planet) throw new Error("No matching planet found");
 
 	const newLaunch = Object.assign(launch, {
 		success: true,

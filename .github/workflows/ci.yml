@@ -7,7 +7,7 @@ on:
 jobs:
     build:
         env:
-            CI: true
+            CI: true # to exit test runers of client automatically after completing all tests.
             DB_URL: mongodb://127.0.0.1:27017/nasa
 
         strategy:
