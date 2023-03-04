@@ -1,7 +1,5 @@
 name: NASA project build & test CI
 on:
-    push:
-        branches: [main]
     pull_request:
         branches: [main]
 jobs:
