@@ -12,11 +12,8 @@ app.use(helmet());
 const api_v1 = require("./routes/api_v1");
 
 app.use(express.json());
-app.use(
-	cors({
-		origin: "http://localhost:3000",
-	})
-);
+app.use(cors());
+
 app.use(morgan("dev"));
 
 app.use("/v1", api_v1);
