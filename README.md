@@ -34,7 +34,7 @@ docker compose stop
 
 ![](images/containers-stop.png)
 
--   #### To stop & remove all running containers
+-   #### To stop & remove all running containers along side with volume
 
 ```
 docker compose down -v
