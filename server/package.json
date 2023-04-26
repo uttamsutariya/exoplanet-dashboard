@@ -5,7 +5,7 @@
 	"main": "src/server.js",
 	"scripts": {
 		"start": "node src/server.js",
-		"cluster": "pm2 start src/server.js --name nasa-project -i max",
+		"cluster": "pm2 start src/server.js --name nasa-project",
 		"dev": "nodemon src/server.js",
 		"test": "jest --detectOpenHandles",
 		"test-watch": "jest --watch"
